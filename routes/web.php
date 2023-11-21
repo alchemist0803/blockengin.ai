@@ -68,6 +68,7 @@ use App\Http\Controllers\User\PromocodeController;
 use App\Http\Controllers\User\UserSupportController;
 use App\Http\Controllers\User\UserNotificationController;
 use App\Http\Controllers\User\SearchController;
+
 use App\Services\StripeService;
 use Illuminate\Support\Facades\Artisan;
 
@@ -97,6 +98,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/terms-and-conditions', 'termsAndConditions')->name('terms');
     Route::get('/privacy-policy', 'privacyPolicy')->name('privacy');
 });
+
 
 // PAYMENT GATEWAY WEBHOOKS ROUTES
 Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handleStripe']);

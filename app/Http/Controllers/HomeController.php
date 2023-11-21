@@ -145,8 +145,6 @@ class HomeController extends Controller
      */
     public function contactShow()
     {
-        var_dump("asdasdas");
-        exit;
         $information = $this->metadataInformation();
 
         return view('contact', compact('information'));

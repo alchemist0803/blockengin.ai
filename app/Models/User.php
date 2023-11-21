@@ -28,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'company',
         'website',
         'email',
+        'metamask_address',
         'workbook',
         'password',
         'phone_number',

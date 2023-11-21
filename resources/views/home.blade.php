@@ -78,6 +78,7 @@
                         @if (config('settings.registration') == 'enabled')
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="ml-2 action-button register-button pl-5 pr-5">{{ __('Sign Up') }}</a>
+                                <span style="cursor: pointer;" id="metamaskconnect_btn" class="ml-2 action-button register-button pl-5 pr-5">{{ __('Connect Metamask') }}</span>
                             @endif
                         @endif
                     @endauth
@@ -2001,6 +2002,42 @@
             AOS.init();
 
 		});    
+    </script>
+    <script type="text/javascript">
+        $('#metamaskconnect_btn').click(async function(event) {
+            console.log('btn clicked!!!')
+            if (typeof window.ethereum !== 'undefined') {
+                // Request access to the user's Ethereum accounts
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                // Get the user's Ethereum address
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                const address = accounts[0];
+                console.log(address);
+
+                // Send the Ethereum address to your Laravel backend
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    method: 'post',
+                    dataType: 'json',
+                    url: 'metamaskconnect',
+                    data: {
+                         address: address,
+                         name: address,
+                         email: address+'@metamask.com',
+                         password: '12345678'
+                        },
+                    success: function (response) {
+                        window.location.href = "{{ route('user.dashboard') }}";
+                    },
+                    error: function (xhr, status, error) {
+                        // console.error(error);
+                    },
+                })
+            } else {
+                console.log('Metamask extension not detected');
+            }
+        });
     </script>
 @endsection
         
