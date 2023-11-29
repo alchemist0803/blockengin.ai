@@ -76,7 +76,7 @@
                         <?php if(config('settings.registration') == 'enabled'): ?>
                             <?php if(Route::has('register')): ?>
                                 <a href="<?php echo e(route('register')); ?>" class="ml-2 action-button register-button pl-5 pr-5"><?php echo e(__('Sign Up')); ?></a>
-                                <span style="cursor: pointer;" id="metamaskconnect_btn" class="ml-2 action-button register-button pl-5 pr-5"><?php echo e(__('Connect Metamask')); ?></span>
+                                <!-- <span style="cursor: pointer;" id="metamaskconnect_btn" class="ml-2 action-button register-button pl-5 pr-5"><?php echo e(__('Connect Metamask')); ?></span> -->
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endif; ?>

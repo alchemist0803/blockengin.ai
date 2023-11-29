@@ -78,7 +78,7 @@
                         @if (config('settings.registration') == 'enabled')
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="ml-2 action-button register-button pl-5 pr-5">{{ __('Sign Up') }}</a>
-                                <span style="cursor: pointer;" id="metamaskconnect_btn" class="ml-2 action-button register-button pl-5 pr-5">{{ __('Connect Metamask') }}</span>
+                                <!-- <span style="cursor: pointer;" id="metamaskconnect_btn" class="ml-2 action-button register-button pl-5 pr-5">{{ __('Connect Metamask') }}</span> -->
                             @endif
                         @endif
                     @endauth

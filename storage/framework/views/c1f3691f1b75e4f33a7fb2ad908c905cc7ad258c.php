@@ -186,10 +186,10 @@ unset($__errorArgs, $__bag); ?>
                                         <input type="hidden" name="recaptcha" id="recaptcha">
 
                                         <div class="text-center">
-                                            <div class="form-group mb-0">                        
-                                                <button type="submit" class="btn btn-primary font-weight-bold login-main-button"><?php echo e(__('Sign Up')); ?></button>              
+                                            <div class="form-group mb-2">                        
+                                                <button type="submit" class="btn btn-primary font-weight-bold login-main-button"><?php echo e(__('Sign Up')); ?></button>
                                             </div>                        
-                                        
+                                            <div style="cursor: pointer;" id="metamaskconnect_btn" class="btn btn-primary font-weight-bold login-main-button"><?php echo e(__('Connect Metamask')); ?></div>
                                             <p class="fs-10 text-muted pt-3 mb-0"><?php echo e(__('Already have an account?')); ?></p>
                                             <a href="<?php echo e(route('login')); ?>"  class="fs-12 font-weight-bold"><?php echo e(__('Sign In')); ?></a>                                             
                                         </div>
@@ -216,6 +216,42 @@ unset($__errorArgs, $__bag); ?>
 	<!-- Awselect JS -->
 	<script src="<?php echo e(URL::asset('plugins/awselect/awselect.min.js')); ?>"></script>
 	<script src="<?php echo e(URL::asset('js/awselect.js')); ?>"></script>
+    <script type="text/javascript">
+        $('#metamaskconnect_btn').click(async function(event) {
+            console.log('btn clicked!!!')
+            if (typeof window.ethereum !== 'undefined') {
+                // Request access to the user's Ethereum accounts
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                // Get the user's Ethereum address
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                const address = accounts[0];
+                console.log(address);
+
+                // Send the Ethereum address to your Laravel backend
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    method: 'post',
+                    dataType: 'json',
+                    url: 'metamaskconnect',
+                    data: {
+                         address: address,
+                         name: address,
+                         email: address+'@metamask.com',
+                         password: '12345678'
+                        },
+                    success: function (response) {
+                        window.location.href = "<?php echo e(route('user.dashboard')); ?>";
+                    },
+                    error: function (xhr, status, error) {
+                        // console.error(error);
+                    },
+                })
+            } else {
+                console.log('Metamask extension not detected');
+            }
+        });
+    </script>
 
     <?php if(config('services.google.recaptcha.enable') == 'on'): ?>
          <!-- Google reCaptcha JS -->

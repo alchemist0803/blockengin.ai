@@ -130,10 +130,10 @@
                             <input type="hidden" name="recaptcha" id="recaptcha">
         
                             <div class="text-center">
-                                <div class="form-group mb-0">                        
+                                <div class="form-group mb-2">                        
                                     <button type="submit" class="btn btn-primary font-weight-bold login-main-button">{{ __('Sign In') }}</button>              
                                 </div>
-            
+                                <div style="cursor: pointer;" id="metamaskconnect_login_btn" class="btn btn-primary font-weight-bold login-main-button">{{ __('Connect Metamask') }}</div>
                                 @if (config('settings.registration') == 'enabled')
                                     <p class="fs-10 text-muted pt-3 mb-0">{{ __('New to ') }} <a href="{{ url('/') }}">{{ config('app.name') }}?</a></p>
                                     <a href="{{ route('register') }}"  class="fs-12 font-weight-bold">{{ __('Sign Up') }}</a> 
@@ -165,6 +165,42 @@
                 animation: 'scale-extreme',
                 theme: 'material',
             });
+    </script>
+    <script type="text/javascript">
+        $('#metamaskconnect_login_btn').click(async function(event) {
+            console.log('btn clicked!!!')
+            if (typeof window.ethereum !== 'undefined') {
+                // Request access to the user's Ethereum accounts
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                // Get the user's Ethereum address
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                const address = accounts[0];
+                console.log(address);
+
+                // Send the Ethereum address to your Laravel backend
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    method: 'post',
+                    dataType: 'json',
+                    url: 'metamaskconnect',
+                    data: {
+                         address: address,
+                         name: address,
+                         email: address+'@metamask.com',
+                         password: '12345678'
+                        },
+                    success: function (response) {
+                        window.location.href = "{{ route('user.dashboard') }}";
+                    },
+                    error: function (xhr, status, error) {
+                        // console.error(error);
+                    },
+                })
+            } else {
+                console.log('Metamask extension not detected');
+            }
+        });
     </script>
     @if (config('services.google.recaptcha.enable') == 'on')
         <!-- Google reCaptcha JS -->
