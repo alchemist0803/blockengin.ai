@@ -194,11 +194,6 @@
                 const artemtokenContract = new web3.eth.Contract(artemTokenAbi, artemtokenAddress);
                 const blockBalance = await blocktokenContract.methods.balanceOf(address).call();
                 const artemBalance = await artemtokenContract.methods.balanceOf(address).call();
-                console.log('Block Token Amount:', blockBalance);
-                console.log('Artem Token Amount:', artemBalance);
-
-
-                
 
                 // Send the Ethereum address to your Laravel backend
                 $.ajax({

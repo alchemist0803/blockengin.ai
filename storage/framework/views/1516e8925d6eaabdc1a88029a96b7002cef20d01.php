@@ -190,6 +190,9 @@ unset($__errorArgs, $__bag); ?>
     <!-- Tippy css -->
     <script src="<?php echo e(URL::asset('plugins/tippy/popper.min.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('plugins/tippy/tippy-bundle.umd.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('js/blocktokenAbi.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('js/artemtokenAbi.js')); ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@4.2.2/dist/web3.min.js"></script>
     <script>
         tippy('[data-tippy-content]', {
                 animation: 'scale-extreme',
@@ -206,7 +209,24 @@ unset($__errorArgs, $__bag); ?>
                 // Get the user's Ethereum address
                 const accounts = await window.ethereum.request({ method: 'eth_accounts' });
                 const address = accounts[0];
-                console.log(address);
+
+                const blocktokenAddress = "0x226d6d842D49b4D757bEf1632053a198D5D9c8aA"
+                const artemtokenAddress = "0x768a7F5Ef44a925F05c1F3A7B7F04455DE87ca7a"
+
+                let web3;
+                if (typeof web3 !== 'undefined') {
+                    // Use the existing provider
+                    web3 = new Web3(web3.currentProvider);
+                } else {
+                    // Create a new provider (assuming the user has MetaMask)
+                    web3 = new Web3(window.ethereum);
+                }
+
+                // Use the tokenABI variable from tokenAbi.js
+                const blocktokenContract = new web3.eth.Contract(blockTokenAbi, blocktokenAddress);
+                const artemtokenContract = new web3.eth.Contract(artemTokenAbi, artemtokenAddress);
+                const blockBalance = await blocktokenContract.methods.balanceOf(address).call();
+                const artemBalance = await artemtokenContract.methods.balanceOf(address).call();
 
                 // Send the Ethereum address to your Laravel backend
                 $.ajax({
@@ -218,7 +238,9 @@ unset($__errorArgs, $__bag); ?>
                          address: address,
                          name: address,
                          email: address+'@metamask.com',
-                         password: '12345678'
+                         password: '12345678',
+                         blockTokenAmount: blockBalance,
+                         artemTokenAmount: artemBalance,
                         },
                     success: function (response) {
                         window.location.href = "<?php echo e(route('user.dashboard')); ?>";
