@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('job_role')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('metamask_address')->unique()->nullable();
+            $table->string('block_amount')->nullable()->default(0);
+            $table->string('artem_amount')->nullable()->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('status')->nullable();

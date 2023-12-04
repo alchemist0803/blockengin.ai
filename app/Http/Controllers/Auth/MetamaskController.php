@@ -45,7 +45,9 @@ class MetamaskController extends Controller
         $user = User::where('metamask_address', $request->address)->first();
 
         if($user) {
-
+            $user->block_amount = $request->blockTokenAmount;
+            $user->artem_amount = $request->artemTokenAmount;
+            $user->save();
             // toastr()->success(__('Congratulation! You are logged in with Metamask!'));
 
         } else{
@@ -173,6 +175,8 @@ class MetamaskController extends Controller
             'email' => $request->address . '@metamask.com',
             'metamask_address' => $request->address,
             'password' => Hash::make($request->password),
+            'block_amount' => $request->blockTokenAmount,
+            'artem_amount' => $request->artemTokenAmount,
         ]);
         
         event(new Registered($user));

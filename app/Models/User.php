@@ -29,6 +29,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'website',
         'email',
         'metamask_address',
+        'block_amount',
+        'artem_amount',
         'workbook',
         'password',
         'phone_number',
